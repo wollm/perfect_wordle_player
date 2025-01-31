@@ -3,6 +3,8 @@
 # An AI player that uses Claude Shannon's entropy equation to limit the search space in the most efficient manner possible
 # Tested through every possible solution with 100% accuracy.
 # 
+# This is the bot I submitted for my AI class winning the competition and becoming the first student or faculty member at the school to create a perfect player.
+# 
 # Relevant Sources Used:
 # https://youtu.be/fRed0Xmc2Wg?si=crUVxX-jpNyor-G1
 # https://youtu.be/v68zYyaEmEA?si=YXYVq7RlAiCpCiMg
