@@ -1,0 +1,43 @@
+The heart of this approach utilizes information theory, particularly Claude Shannon’s entropy equation. This is a method for quantifying information gain in bits. The objective with each guess is to select the word that provides the most bits of information—each bit essentially halves the remaining solution space.
+
+Initial Strategy
+
+To start, the bot always uses the word “SOARE.” Several other starting words, including TARES, CRANE, and CRATE, were tested, but SOARE proved to be the quickest and most effective. After making this hard-coded first guess, the core algorithm begins.
+
+Guessing Process
+
+Starting with the second guess, the bot follows these steps:
+	1.	Filter Possible Solutions:
+	    •	Compile a list of possible solutions from the vocabulary by checking each word’s feedback pattern against previous guesses.
+	2.	Check Solution Count:
+	    •	If there is only one possible solution left, return it (Wordle solved!).
+	3.	Run the Entropy-Maximizing Algorithm (If Multiple Solutions Remain):
+	    a. Define Candidate Guesses:
+	        •	On guesses 2-5, the bot sets candidate_guesses to the full vocabulary, not just possible solutions.
+	        •	This is because invalid words (words that cannot be the solution) can still provide the most information.
+	        •	A key optimization in later iterations was to limit candidate guesses to only possible solutions on the final guess, ensuring no invalid words were guessed at the last attempt. This small tweak improved accuracy from ~99.5% to 100%.
+	    b. Build a Frequency Table:
+	        •	For each word in candidate_guesses, the bot generates a frequency table of feedback solutions against every possible solution.
+	        •	The key in this table is a feedback pattern (e.g., (0,1,1,2,2)), and the value is the number of times that pattern appeared.
+	        •	This step forms the foundation of entropy calculations by creating a feedback frequency distribution that shows how likely different feedback patterns are.
+	    c. Compute Shannon Entropy:
+	        •	Using the frequency table, the bot calculates the probability of each feedback pattern, assuming all solutions are equally likely.
+            •	Then, it applies Shannon’s entropy formula:
+
+                H = -\sum (p \cdot \log_2(p))
+
+	        •	A higher entropy value means a more informative guess that reduces the solution space significantly.
+	        •	A lower entropy value means the guess provides less information and is thus not a great choice.
+	        •	d. Track the Best Guess:
+	        •	If the entropy value for a word is greater than the current best entropy, update best_entropy and set best_guess to that word.
+	        •	e. Repeat for Every Word in Candidate Guesses.
+
+Performance & Future Optimization
+
+While this bot is perfectly accurate, it suffers from slow performance due to nested loops across the entire vocabulary. To mitigate this:
+	•	Hard-coding a second guess significantly improved speed but slightly reduced accuracy to ~99%.
+	•	The next step in optimizing this bot would be:
+	•	Precomputing second guesses: Running the bot across many games to record all second guesses.
+	•	Creating a reduced lookup table: Instead of searching 13,000 words, limit second-round candidates to just 100-200 words based on precomputed second guesses.
+	•	This would massively reduce computation time while maintaining near-perfect accuracy.
+Unfortunately, time constraints prevented this optimization from being implemented, but it remains a clear next step for improving efficiency.
